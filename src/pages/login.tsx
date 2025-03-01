@@ -3,6 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "@/config/api";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -17,6 +19,7 @@ const formSchema = z.object({
 });
 
 const Login = () => {
+	const navigate = useNavigate();
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -28,25 +31,26 @@ const Login = () => {
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		try {
 			const response = await axios.post(
-				"https://frontend-take-home-service.fetch.com/auth/login",
+				`${API_BASE_URL}/auth/login`,
 				{
 					name: values.name,
 					email: values.email,
 				},
 				{
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+					withCredentials: true,
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
 			);
+			console.log(response);
 			if (response.status === 200) {
 				console.log(response);
-        toast.success("Login successful!");
-        // navigate("/dashboard");
-      } else {
-        toast.error("Login failed. Please try again.");
-      }
+				toast.success("Login successful!");
+				navigate("/dashboard");
+			} else {
+				toast.error("Login failed. Please try again.");
+			}
 		} catch {
 			toast("Failed to submit the form. Please try again.");
 		}
