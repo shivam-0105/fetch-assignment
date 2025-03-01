@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { authAPI, dogsAPI } from "@/config/api";
-import { useAuth } from "@/context/AuthContext";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { DogCard } from "./dogcard";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Navbar } from "@/components/ui/navbar";
 
 interface Dog {
   id: string;
@@ -21,7 +20,6 @@ interface Dog {
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { userName } = useAuth();
   const [dogs, setDogs] = useState<Dog[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
@@ -58,18 +56,6 @@ const Dashboard = () => {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await authAPI.logout();
-      toast.success("Logged out successfully");
-      navigate("/login");
-    } catch (error) {
-      console.error("Logout error:", error);
-      toast.error("Failed to logout properly");
-      navigate("/login");
-    }
-  };
-
   useEffect(() => {
     const checkAuth = async () => {
       const { authenticated, error } = await authAPI.checkAuth();
@@ -89,19 +75,7 @@ const Dashboard = () => {
 
   return (
     <div className="container mx-auto py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Dog Finder Dashboard</h1>
-        <div className="flex items-center space-x-4">
-          <Avatar>
-            <AvatarFallback className="transition hover:bg-orange-400 hover:text-white">
-              {userName?.slice(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <Button className="bg-orange" onClick={handleLogout}>
-            Logout
-          </Button>
-        </div>
-      </div>
+      <Navbar />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {loading
