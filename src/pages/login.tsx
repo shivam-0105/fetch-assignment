@@ -53,7 +53,7 @@ const Login = () => {
 			<div className="flex w-full min-h-screen">
 				<div className="hidden w-1/2 flex-col justify-between p-8 text-white md:flex relative overflow-hidden">
 					<div className="absolute inset-0 z-0">
-						<img src={LoginImage} alt="Background" className="h-full w-full object-cover" />
+						<img src={LoginImage} alt="Background" className="h-full w-full p-2 object-cover" />
 					</div>
 					<div className="relative z-10 flex items-center gap-2">
 						<span className="text-xl font-medium">Fetch Assessment</span>

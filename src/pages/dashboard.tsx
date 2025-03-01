@@ -7,7 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { DogCard } from "./dogcard";
-import { Navbar } from "@/components/ui/navbar";
+import { Navbar } from "@/components/custom/navbar";
+import { AppSidebar } from "@/components/custom/app-sidebar";
+
+import { PAGINATION_CONFIG } from "@/config/constants";
 
 interface Dog {
   id: string;
@@ -24,14 +27,15 @@ const Dashboard = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const pageSize = PAGINATION_CONFIG.DEFAULT_PAGE_SIZE;
 
   const fetchDogs = async (pageNum: number = 1) => {
     try {
       setLoading(true);
 
       const searchResults = await dogsAPI.searchDogs({
-        size: 12,
-        from: (pageNum - 1) * 12,
+        size: pageSize,
+        from: (pageNum - 1) * pageSize,
         sort: "breed:asc",
       });
 
@@ -42,7 +46,7 @@ const Dashboard = () => {
         setDogs(dogsData);
 
         const total = searchResults.total || 0;
-        setTotalPages(Math.ceil(total / 12) || 1);
+        setTotalPages(Math.ceil(total / pageSize) || 1);
       } else {
         setDogs([]);
         setTotalPages(1);
@@ -74,12 +78,14 @@ const Dashboard = () => {
   }, [navigate]);
 
   return (
-    <div className="container mx-auto py-8">
-      <Navbar />
+    <>
+    <AppSidebar />
+    <div className="container mx-auto p-6">
+      <Navbar/>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
         {loading
-          ? Array(12)
+          ? Array(pageSize)
             .fill(0)
             .map((_, index) => (
               <Card key={`skeleton-${index}`} className="overflow-hidden">
@@ -124,6 +130,7 @@ const Dashboard = () => {
         </div>
       )}
     </div>
+    </>
   )
 }
 

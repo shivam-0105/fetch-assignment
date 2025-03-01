@@ -14,7 +14,7 @@ interface DogCardProps {
 export const DogCard = ({ dog }: DogCardProps) => {
   return (
     <Card key={dog.id} className="overflow-hidden">
-      <div className="h-48 overflow-hidden">
+      <div className="h-64 overflow-hidden">
         <img
           src={dog.img}
           alt={dog.name}
