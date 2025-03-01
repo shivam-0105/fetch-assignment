@@ -11,5 +11,17 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     }
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://frontend-take-home-service.fetch.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+        cookieDomainRewrite: {
+          '*': ''
+        }
+      }
+    }
   }
 })
