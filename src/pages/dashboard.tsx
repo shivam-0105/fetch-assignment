@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { authAPI, dogsAPI } from "@/config/api";
+import { useFilters } from "@/contexts/FilterContext";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
@@ -23,6 +24,7 @@ interface Dog {
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const filters = useFilters().filters;
   const [dogs, setDogs] = useState<Dog[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
@@ -32,14 +34,14 @@ const Dashboard = () => {
   const fetchDogs = async (pageNum: number = 1) => {
     try {
       setLoading(true);
-
-      const searchResults = await dogsAPI.searchDogs({
+      const filterParams: any = {
         size: pageSize,
         from: (pageNum - 1) * pageSize,
-        sort: "breed:asc",
-      });
-
-      console.log("Search response:", searchResults);
+        sort: `${filters.sortBy}:${filters.sortOrder}`,
+        ageMin: filters.minAge,
+        ageMax: filters.maxAge,
+      };
+      const searchResults = await dogsAPI.searchDogs(filterParams);
 
       if (searchResults && searchResults.resultIds && searchResults.resultIds.length > 0) {
         const dogsData = await dogsAPI.getDogsByIds(searchResults.resultIds);
@@ -65,7 +67,6 @@ const Dashboard = () => {
       const { authenticated, error } = await authAPI.checkAuth();
 
       if (authenticated) {
-        console.log("User is authenticated, fetching dogs");
         fetchDogs(1);
       } else {
         console.error("Authentication failed:", error);
@@ -76,6 +77,10 @@ const Dashboard = () => {
 
     checkAuth();
   }, [navigate]);
+
+  useEffect(() => {
+    fetchDogs();
+  }, [filters]);
 
   return (
     <>
