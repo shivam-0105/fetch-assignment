@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface DogCardProps {
@@ -13,7 +14,7 @@ interface DogCardProps {
 
 export const DogCard = ({ dog }: DogCardProps) => {
   return (
-    <Card key={dog.id} className="overflow-hidden">
+    <Card key={dog.id} className="overflow-hidden transition hover:border-orange hover:shadow-lg">
       <div className="h-64 overflow-hidden">
         <img
           src={dog.img}
@@ -25,8 +26,13 @@ export const DogCard = ({ dog }: DogCardProps) => {
         />
       </div>
       <CardHeader className="p-4 pb-0">
-        <CardTitle>{dog.name}</CardTitle>
-        <CardDescription>{dog.breed} • {dog.age > 0 ? (dog.age > 1 ? `${dog.age} years old` : `${dog.age} year old`) : "New born"}</CardDescription>
+        <CardTitle className="flex items-center justify-between">
+          {dog.name}
+          <Badge variant="outline" className="text-orange">{dog.breed}</Badge>
+        </CardTitle>
+        <CardDescription>
+          {dog.age > 0 ? (dog.age > 1 ? `${dog.age} years old` : `${dog.age} year old`) : "New born"}
+        </CardDescription>
       </CardHeader>
       <CardContent className="p-4">
         <p className="text-sm text-muted-foreground">

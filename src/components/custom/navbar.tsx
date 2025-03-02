@@ -17,14 +17,14 @@ const Navbar = () => {
             {userName?.slice(0, 2).toUpperCase()}
           </AvatarFallback>
         </Avatar>
-        <Button 
-          variant="outline" 
-          className="w-full transition hover:bg-orange hover:border-orange rounded-full">
-          <Link 
-            to="https://github.com/shivam-0105/fetch-assignment" target="_blank" className="text-foreground hover:text-foreground">
-              <FaGithub />
-          </Link>
-        </Button>
+        <Link
+          to="https://github.com/shivam-0105/fetch-assignment" target="_blank" className="text-foreground hover:text-foreground">
+          <Button
+            variant="outline"
+            className="w-full transition hover:bg-orange hover:border-orange rounded-full">
+            <FaGithub />
+          </Button>
+        </Link>
       </div>
     </div>
   )

@@ -77,7 +77,7 @@ export function AppSidebar({ onFilterChange }: AppSidebarProps) {
     <div className="bg-sidebar">
       <Sidebar className="py-4 px-2">
         <SidebarHeader>
-          <h1 className="text-3xl font-bold flex items-center">
+          <h1 className="text-3xl text-foreground font-bold flex items-center justify-center">
             <span className="text-orange"><PiPawPrintFill /></span>Match
           </h1>
         </SidebarHeader>

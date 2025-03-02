@@ -123,14 +123,14 @@ const Login = () => {
 							</Form>
 						</CardContent>
 						<CardFooter>
-							<Button 
-								variant="outline" 
-								className="w-full hover:border-orange">
-									<Link 
-										to="https://github.com/shivam-0105/fetch-assignment" target="_blank" className="text-foreground hover:text-foreground flex items-center gap-2">
-											<FaGithub />Github Repository Link
-									</Link>
-							</Button>
+							<Link
+								to="https://github.com/shivam-0105/fetch-assignment" target="_blank" className="w-full text-foreground hover:text-foreground">
+								<Button
+									variant="secondary"
+									className="w-full">
+									<FaGithub /> GitHub Repository Link
+								</Button>
+							</Link>
 						</CardFooter>
 					</Card>
 				</div>
