@@ -5,11 +5,13 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { authAPI } from "@/config/api";
 import { useAuth } from "@/context/AuthContext";
+import { Link } from "react-router-dom";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FaGithub } from "react-icons/fa";
 
 import LoginImage from "@/assets/login-image.jpg"
 
@@ -116,13 +118,20 @@ const Login = () => {
 										<Button type="submit" className="w-full bg-orange">
 											Login
 										</Button>
-										<Button variant="outline" className="w-full">
-											Login with Google
-										</Button>
 									</div>
 								</form>
 							</Form>
 						</CardContent>
+						<CardFooter>
+							<Button 
+								variant="outline" 
+								className="w-full hover:border-orange">
+									<Link 
+										to="https://github.com/shivam-0105/fetch-assignment" target="_blank" className="text-foreground hover:text-foreground flex items-center gap-2">
+											<FaGithub />Github Repository Link
+									</Link>
+							</Button>
+						</CardFooter>
 					</Card>
 				</div>
 			</div >
