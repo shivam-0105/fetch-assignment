@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { authAPI } from "@/config/api"
+import { authAPI, dogsAPI } from "@/config/api"
 import { useNavigate } from "react-router-dom"
 import {
   Sidebar,
@@ -22,16 +22,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "../ui/input"
-import { BreedsMultiSelect } from "./breedmultiselect" // Import the new component
 import { useFilters } from "@/contexts/FilterContext";
 import { MdFilterAlt } from "react-icons/md";
+import { MultiSelect } from "./multi-select"
 
 export interface FilterParams {
   sortBy: string;
   sortOrder: string;
   minAge: number;
   maxAge: number;
-  // breeds: string[]; // Added breeds to filters
+  breeds: string[]; // Added breeds to filters
 }
 
 export interface AppSidebarProps {
@@ -41,22 +41,38 @@ export interface AppSidebarProps {
 export function AppSidebar({ onFilterChange }: AppSidebarProps) {
   const navigate = useNavigate();
   const { updateFilters } = useFilters();
+  const [breeds, setBreeds] = useState<string[]>([]);
   const [filters, setFilters] = useState<FilterParams>({
     minAge: 1,
     maxAge: 100,
     sortBy: "breed",
     sortOrder: "asc",
-    // breeds: ["Affenpinscher"], // Initialize breeds as empty array
+    breeds: [], // Initialize breeds as empty array
   });
+  const breedOptions = breeds.map((breed) => ({ label: breed, value: breed }));
+
+  useEffect(() => {
+    const fetchBreeds = async () => {
+      try {
+        const response = await dogsAPI.getBreeds();
+        setBreeds(response);
+      } catch (error) {
+        console.error("Error fetching breeds:", error);
+      }
+    };
+    fetchBreeds();
+  },[]);
 
   const handleFilterChange = (key: keyof FilterParams, value: string | number | string[]) => {
     const newFilters = { ...filters, [key]: value };
+    console.log("New filters:", newFilters);
     setFilters(newFilters);
     onFilterChange?.(newFilters);
   }
 
   const handleUpdateDashboard = () => {
     updateFilters(filters);
+    console.log("Filters updated:", filters);
     if (onFilterChange) {
       onFilterChange(filters);
     }
@@ -86,10 +102,13 @@ export function AppSidebar({ onFilterChange }: AppSidebarProps) {
           <SidebarGroup>
             <SidebarGroupLabel>Breeds</SidebarGroupLabel>
             <SidebarGroupContent>
-              {/* <BreedsMultiSelect 
+              <MultiSelect 
+                options={breedOptions}
                 value={filters.breeds}
-                onChange={(value) => handleFilterChange('breeds', value)}
-              /> */}
+                onValueChange={(selectedValues) => handleFilterChange('breeds', selectedValues)}
+                animation={2}
+                maxCount={1}
+              />
             </SidebarGroupContent>
 
             <SidebarGroupLabel>Sort By</SidebarGroupLabel>

@@ -54,12 +54,14 @@ const Dashboard = () => {
   const fetchDogs = async (pageNum: number = 1) => {
     try {
       setLoading(true);
+      console.log("Fetching dogs with filters:", filters);
       const filterParams: any = {
         size: pageSize,
         from: (pageNum - 1) * pageSize,
         sort: `${filters.sortBy}:${filters.sortOrder}`,
         ageMin: filters.minAge,
         ageMax: filters.maxAge,
+        breeds: filters.breeds,
       };
       const searchResults = await dogsAPI.searchDogs(filterParams);
 
@@ -109,12 +111,12 @@ const Dashboard = () => {
     }
 
     try {
+      console.log("matching dogs:", matchedDog);
       setMatchedDog(null);
       setLoadingMatch(true);
       const matchResponse = await dogsAPI.match(selectedDogs);
       const { match } =  matchResponse;
       const dogs = await dogsAPI.getDogsByIds([match]);
-      console.log("Matched dog : ", dogs);
       if (dogs && dogs.length > 0) {
         setMatchedDog(dogs[0]);
       }
@@ -141,11 +143,11 @@ const Dashboard = () => {
                 <DialogDescription>
                   {loadingMatch ? (
                     <Skeleton className="h-48 w-full" />
-                  ) : matchedDog ? (
+                  ) : (matchedDog ? (
                     <DogCard dog={matchedDog} />
                   ) : (
                     <p>No match data available.</p>
-                  )}
+                  ))}
                 </DialogDescription>
               </DialogHeader>
             </DialogContent>

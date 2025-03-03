@@ -5,6 +5,7 @@ export interface FilterParams {
   sortOrder: string;
   minAge: number;
   maxAge: number;
+  breeds: string[];
 }
 
 const defaultFilters: FilterParams = {
@@ -12,6 +13,7 @@ const defaultFilters: FilterParams = {
   sortOrder: 'asc',
   minAge: 0,
   maxAge: 100,
+  breeds: [],
 };
 
 interface FilterContextType {
