@@ -65,14 +65,12 @@ export function AppSidebar({ onFilterChange }: AppSidebarProps) {
 
   const handleFilterChange = (key: keyof FilterParams, value: string | number | string[]) => {
     const newFilters = { ...filters, [key]: value };
-    console.log("New filters:", newFilters);
     setFilters(newFilters);
     onFilterChange?.(newFilters);
   }
 
   const handleUpdateDashboard = () => {
     updateFilters(filters);
-    console.log("Filters updated:", filters);
     if (onFilterChange) {
       onFilterChange(filters);
     }

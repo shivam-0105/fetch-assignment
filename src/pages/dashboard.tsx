@@ -105,14 +105,13 @@ const Dashboard = () => {
   }, [filters]);
 
   const handleFindMatch = async () => {
+    setMatchedDog(null);
     if (selectedDogs.length === 0 || selectedDogs.length > 100) {
       toast.error("Unable to find a match. Please select at least one dog and ensure there are no more than 100 dogs selected.");
       return;
     }
 
     try {
-      console.log("matching dogs:", matchedDog);
-      setMatchedDog(null);
       setLoadingMatch(true);
       const matchResponse = await dogsAPI.match(selectedDogs);
       const { match } =  matchResponse;
@@ -143,7 +142,7 @@ const Dashboard = () => {
                 <DialogDescription>
                   {loadingMatch ? (
                     <Skeleton className="h-48 w-full" />
-                  ) : (matchedDog ? (
+                  ) : (matchedDog !== null ? (
                     <DogCard dog={matchedDog} />
                   ) : (
                     <p>No match data available.</p>
