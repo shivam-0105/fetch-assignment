@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { authAPI, dogsAPI } from "@/config/api";
 import { useFilters } from "@/contexts/FilterContext";
 
@@ -10,8 +10,24 @@ import { toast } from "sonner";
 import { DogCard } from "./dogcard";
 import { Navbar } from "@/components/custom/navbar";
 import { AppSidebar } from "@/components/custom/app-sidebar";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { SiCodemagic } from "react-icons/si";
+import { FaWandMagicSparkles } from "react-icons/fa6";
+
 
 import { PAGINATION_CONFIG } from "@/config/constants";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { FaGithub } from "react-icons/fa";
+import { useAuth } from "@/contexts/AuthContext";
+import { useSelectedDogs } from "../contexts/SelectedDogsContext";
+
 
 interface Dog {
   id: string;
@@ -25,8 +41,12 @@ interface Dog {
 const Dashboard = () => {
   const navigate = useNavigate();
   const filters = useFilters().filters;
+  const { userName } = useAuth();
+  const { selectedDogs , resetSelectedDogs } = useSelectedDogs();
   const [dogs, setDogs] = useState<Dog[]>([]);
+  const [matchedDog, setMatchedDog] = useState<Dog | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadingMatch, setLoadingMatch] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const pageSize = PAGINATION_CONFIG.DEFAULT_PAGE_SIZE;
@@ -82,11 +102,74 @@ const Dashboard = () => {
     fetchDogs();
   }, [filters]);
 
+  const handleFindMatch = async () => {
+    if (selectedDogs.length === 0 || selectedDogs.length > 100) {
+      toast.error("Unable to find a match. Please select at least one dog and ensure there are no more than 100 dogs selected.");
+      return;
+    }
+
+    try {
+      setMatchedDog(null);
+      setLoadingMatch(true);
+      const matchResponse = await dogsAPI.match(selectedDogs);
+      const { match } =  matchResponse;
+      const dogs = await dogsAPI.getDogsByIds([match]);
+      console.log("Matched dog : ", dogs);
+      if (dogs && dogs.length > 0) {
+        setMatchedDog(dogs[0]);
+      }
+    } catch (error) {
+      console.error("Error fetching match:", error);
+      toast.error("Failed to find a match. Please try again.");
+    } finally {
+      setLoadingMatch(false);
+    }
+  };
+
+
   return (
     <>
     <AppSidebar />
     <div className="container mx-auto p-6">
-      <Navbar/>
+      <div className="flex justify-between mb-8">
+        <div className="flex items-center gap-x-2">
+          <Dialog>
+            <DialogTrigger className="h-8 w-full text-sm flex items-center bg-orange text-white gap-x-2" onClick={handleFindMatch}>Find a match <FaWandMagicSparkles /></DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="flex gap-x-2 mb-6">Here's your match <SiCodemagic /></DialogTitle>
+                <DialogDescription>
+                  {loadingMatch ? (
+                    <Skeleton className="h-48 w-full" />
+                  ) : matchedDog ? (
+                    <DogCard dog={matchedDog} />
+                  ) : (
+                    <p>No match data available.</p>
+                  )}
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+          <Button variant="outline" className="w-full" onClick={resetSelectedDogs}>
+            Reset Selected Dogs
+          </Button>
+        </div>
+        <div className="flex items-center space-x-4">
+          <Avatar>
+            <AvatarFallback className="transition hover:bg-orange hover:text-white">
+              {userName?.slice(0, 2).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <Link
+            to="https://github.com/shivam-0105/fetch-assignment" target="_blank" className="text-foreground hover:text-foreground">
+            <Button
+              variant="outline"
+              className="w-full transition hover:bg-orange hover:border-orange rounded-full">
+              <FaGithub />
+            </Button>
+          </Link>
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
         {loading

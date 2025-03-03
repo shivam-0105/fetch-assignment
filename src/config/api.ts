@@ -56,7 +56,12 @@ export const dogsAPI = {
   getDogsByIds: async (ids: string[]) => {
     const response = await api.post("/dogs", ids);
     return response.data;
-  }
+  },
+
+  match: async (favoriteDogIds: string[]): Promise<{ match: string }> => {
+    const response = await api.post("/dogs/match", favoriteDogIds);
+    return response.data;
+  },
 };
 
 export default api;

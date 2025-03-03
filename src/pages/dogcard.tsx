@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useSelectedDogs } from '../contexts/SelectedDogsContext';
 
 interface DogCardProps {
   dog: {
@@ -13,8 +14,15 @@ interface DogCardProps {
 }
 
 export const DogCard = ({ dog }: DogCardProps) => {
+  const { selectedDogs, toggleDog } = useSelectedDogs();
+  const isSelected = selectedDogs.includes(dog.id);
+
   return (
-    <Card key={dog.id} className="overflow-hidden transition hover:border-orange hover:shadow-lg">
+    <Card 
+      key={dog.id} 
+      className={`overflow-hidden transition hover:border-orange hover:shadow-lg ${isSelected ? 'border-orange' : ''}`}
+      onClick={() => toggleDog(dog.id)}
+    >
       <div className="h-64 overflow-hidden">
         <img
           src={dog.img}

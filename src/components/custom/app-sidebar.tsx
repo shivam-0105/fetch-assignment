@@ -24,6 +24,7 @@ import {
 import { Input } from "../ui/input"
 import { BreedsMultiSelect } from "./breedmultiselect" // Import the new component
 import { useFilters } from "@/contexts/FilterContext";
+import { MdFilterAlt } from "react-icons/md";
 
 export interface FilterParams {
   sortBy: string;
@@ -127,12 +128,15 @@ export function AppSidebar({ onFilterChange }: AppSidebarProps) {
             <SidebarGroupContent>
               <Input type="number" value={filters.maxAge} onChange={(e) => handleFilterChange('maxAge', Number(e.target.value))} />
             </SidebarGroupContent>
+
+            <SidebarGroupContent>
+              <Button variant="outline" onClick={handleUpdateDashboard} className="w-full mt-4">
+                <MdFilterAlt />Apply filters
+              </Button>
+            </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
         <SidebarFooter>
-          <Button variant="outline" onClick={handleUpdateDashboard}>
-            Update Dashboard
-          </Button>
           <Button className="bg-orange" onClick={handleLogout}>
             <MdOutlineLogout /> Logout
           </Button>
