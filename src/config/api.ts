@@ -63,4 +63,11 @@ export const dogsAPI = {
   },
 };
 
+export const locationsAPI = {
+  getLocations: async (zipCodes: string[]) => {
+    const response = await api.post("/locations", zipCodes);
+    return response.data;
+  }
+}
+
 export default api;
