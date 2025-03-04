@@ -9,7 +9,7 @@ interface SelectedDogsContextType {
 
 const SelectedDogsContext = createContext<SelectedDogsContextType | undefined>(undefined);
 
-export const SelectedDogsProvider = ({ children }: { children: ReactNode }): JSX.Element => {
+export const SelectedDogsProvider = ({ children }: { children: ReactNode }) => {
   const [selectedDogs, setSelectedDogs] = useState<string[]>([]);
 
   const toggleDog = (dogId: string) => {

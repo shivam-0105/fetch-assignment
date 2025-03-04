@@ -23,7 +23,7 @@ interface FilterContextType {
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
 
-export function FilterProvider({ children }: { children: ReactNode }): JSX.Element {
+export function FilterProvider({ children }: { children: ReactNode }) {
   const [filters, setFilters] = useState<FilterParams>(defaultFilters);
 
   const updateFilters = (newFilters: FilterParams) => {
