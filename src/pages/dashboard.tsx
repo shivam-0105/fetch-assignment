@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { DogCard } from "./dogcard";
-import { Navbar } from "@/components/custom/navbar";
 import { AppSidebar } from "@/components/custom/app-sidebar";
 import {
   Dialog,
@@ -27,6 +26,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { FaGithub } from "react-icons/fa";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSelectedDogs } from "../contexts/SelectedDogsContext";
+import { ModeToggle } from "@/components/custom/mode-toggle";
 
 
 interface Dog {
@@ -54,7 +54,6 @@ const Dashboard = () => {
   const fetchDogs = async (pageNum: number = 1) => {
     try {
       setLoading(true);
-      console.log("Fetching dogs with filters:", filters);
       const filterParams: any = {
         size: pageSize,
         from: (pageNum - 1) * pageSize,
@@ -165,10 +164,11 @@ const Dashboard = () => {
             to="https://github.com/shivam-0105/fetch-assignment" target="_blank" className="text-foreground hover:text-foreground">
             <Button
               variant="outline"
-              className="w-full transition hover:bg-orange hover:border-orange rounded-full">
+              className="w-full transition hover:bg-orange hover:border-orange">
               <FaGithub />
             </Button>
           </Link>
+          <ModeToggle />
         </div>
       </div>
 

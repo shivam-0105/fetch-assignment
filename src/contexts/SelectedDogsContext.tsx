@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, ReactNode } from 'react';
+import { toast } from 'sonner';
 
 interface SelectedDogsContextType {
   selectedDogs: string[];
@@ -21,6 +22,7 @@ export const SelectedDogsProvider = ({ children }: { children: ReactNode }): JSX
 
   const resetSelectedDogs = () => {
     setSelectedDogs([]);
+    toast.success("Selected dogs reset.");
   };
 
 

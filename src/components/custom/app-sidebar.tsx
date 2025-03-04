@@ -31,7 +31,7 @@ export interface FilterParams {
   sortOrder: string;
   minAge: number;
   maxAge: number;
-  breeds: string[]; // Added breeds to filters
+  breeds: string[];
 }
 
 export interface AppSidebarProps {
@@ -47,7 +47,7 @@ export function AppSidebar({ onFilterChange }: AppSidebarProps) {
     maxAge: 100,
     sortBy: "breed",
     sortOrder: "asc",
-    breeds: [], // Initialize breeds as empty array
+    breeds: [], 
   });
   const breedOptions = breeds.map((breed) => ({ label: breed, value: breed }));
 

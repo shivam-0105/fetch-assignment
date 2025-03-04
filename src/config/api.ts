@@ -14,7 +14,6 @@ const api = axios.create({
 
 // Add request interceptor to ensure credentials are sent
 api.interceptors.request.use(function (config) {
-  // Always ensure withCredentials is true for all requests
   config.withCredentials = true;
   return config;
 }, function (error) {

@@ -18,8 +18,8 @@ export const DogCard = ({ dog }: DogCardProps) => {
   const isSelected = selectedDogs.includes(dog.id);
 
   return (
-    <Card 
-      key={dog.id} 
+    <Card
+      key={dog.id}
       className={`overflow-hidden transition hover:border-orange hover:shadow-lg ${isSelected ? 'border-orange' : ''}`}
       onClick={() => toggleDog(dog.id)}
     >
